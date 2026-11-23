@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>JARVIS | Asistente personal</title>
+<style>
+:root{color-scheme:dark;--bg:#050b14;--panel:#0b1727;--line:#173b55;--cyan:#52dfff;--blue:#268bff;--muted:#8ca8bc;--text:#e8f7ff;--green:#5de0a0}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#123451 0%,#07111f 42%,#03070d 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:18px}
+.wrap{max-width:900px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:8px 2px 16px}.brand{font-weight:800;letter-spacing:.22em;color:var(--cyan);font-size:1.15rem}.status{font-size:.78rem;color:var(--green);border:1px solid #245b4b;border-radius:99px;padding:6px 10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.panel{background:linear-gradient(145deg,#0d1d30ed,#07111fee);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 12px 40px #0005}.hero{grid-column:1/-1;text-align:center;padding:28px 18px}.orb{width:142px;height:142px;margin:5px auto 18px;border-radius:50%;display:grid;place-items:center;border:1px solid #4edcff88;box-shadow:0 0 22px #21bfff55,inset 0 0 25px #21bfff33;background:radial-gradient(circle,#174b69 0%,#0a1d31 58%,#07111f 70%);position:relative}.orb:before,.orb:after{content:"";position:absolute;border:1px solid #45cfff66;border-radius:50%;inset:-10px}.orb:after{inset:-19px;border-style:dashed;opacity:.55}.orb span{font-size:2.3rem;color:var(--cyan);text-shadow:0 0 16px var(--cyan)}h1{font-size:1.5rem;letter-spacing:.16em;margin:8px 0}p{color:var(--muted);line-height:1.5}.clock{font-size:2rem;font-variant-numeric:tabular-nums;color:var(--cyan);font-weight:650}.small{font-size:.8rem;color:var(--muted)}.section-title{font-size:.78rem;letter-spacing:.15em;color:var(--cyan);margin:0 0 12px}.chat{height:210px;overflow:auto;background:#030a12;border:1px solid #16334b;border-radius:12px;padding:12px;margin-bottom:12px}.msg{margin:0 0 12px;line-height:1.45;overflow-wrap:anywhere}.msg b{color:var(--cyan)}.controls{display:flex;gap:8px}.controls input{min-width:0;flex:1;background:#071321;border:1px solid #21425a;border-radius:10px;color:var(--text);padding:12px;font:inherit}.btn{border:1px solid #277da5;background:linear-gradient(135deg,#12638b,#123b70);color:white;border-radius:10px;padding:11px 14px;font:inherit;cursor:pointer}.btn:focus,.controls input:focus{outline:2px solid var(--cyan);outline-offset:2px}.btn.secondary{background:#0a1a2b;border-color:#25445c}.btn.mic{border-radius:50%;width:58px;height:58px;font-size:1.3rem;margin-top:8px}.microw{display:flex;justify-content:center}.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.tile{background:#081523;border:1px solid #1a3b53;border-radius:11px;padding:12px;color:var(--text);text-align:left}.tile strong{display:block;color:var(--cyan);font-size:.9rem;margin-bottom:4px}.foot{text-align:center;color:#66869d;font-size:.75rem;padding:18px 4px}.warning{font-size:.8rem;color:#a9c0d0;border-left:3px solid #d4a64e;padding-left:10px;margin-top:14px}
+@media(max-width:620px){body{padding:12px}.grid{grid-template-columns:1fr}.hero{grid-column:auto}.top{align-items:flex-start}.clock{font-size:1.7rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="brand">J.A.R.V.I.S.</div><div class="status" id="status">● SISTEMA LOCAL ACTIVO</div></header>
+<main class="grid">
+<section class="panel hero">
+ <div class="orb"><span>✦</span></div>
+ <h1>ASISTENTE PERSONAL</h1>
+ <p id="greeting">Sistemas inicializados. Estoy listo para ayudarte.</p>
+ <div class="microw"><button class="btn mic" id="mic" aria-label="Hablar con JARVIS">🎙</button></div>
+ <div class="small" id="voiceHint">Pulsa el micrófono y habla. Requiere permiso del navegador.</div>
+</section>
+<section class="panel">
+ <h2 class="section-title">RELOJ DEL SISTEMA</h2><div class="clock" id="clock">--:--:--</div><div class="small" id="date">Cargando fecha…</div>
+</section>
+<section class="panel">
+ <h2 class="section-title">ESTADO</h2><div>Interfaz: <strong style="color:var(--green)">En funcionamiento</strong></div><p class="small">Modo: demostración local<br>Conexión externa: no configurada</p>
+</section>
+<section class="panel" style="grid-column:1/-1">
+ <h2 class="section-title">CENTRO DE COMUNICACIÓN</h2>
+ <div class="chat" id="chat" aria-live="polite"><p class="msg"><b>JARVIS:</b> Hola. Puedes escribirme “hora”, “fecha”, “ayuda” o “estado”.</p></div>
+ <div class="controls"><input id="command" type="text" placeholder="Escribe un comando…" autocomplete="off"><button class="btn" id="send">Enviar</button></div>
+ <div class="warning">Esta versión no envía mensajes, no accede a tus archivos y no controla el teléfono. Es una interfaz de prueba segura.</div>
+</section>
+<section class="panel" style="grid-column:1/-1">
+ <h2 class="section-title">MÓDULOS</h2>
+ <div class="tiles">
+  <div class="tile"><strong>01 · VOZ</strong><span class="small">Entrada y respuesta hablada</span></div>
+  <div class="tile"><strong>02 · ORGANIZACIÓN</strong><span class="small">Próximamente: tareas y agenda</span></div>
+  <div class="tile"><strong>03 · INVESTIGACIÓN</strong><span class="small">Próximamente: fuentes y consultas</span></div>
+  <div class="tile"><strong>04 · DISPOSITIVOS</strong><span class="small">Próximamente: conexión autorizada</span></div>
+ </div>
+</section>
+</main>
+<footer class="foot">JARVIS WEB · PROTOTIPO 1.0 · Diseñado para móvil y computadora</footer>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+function tick(){const d=new Date();$('clock').textContent=d.toLocaleTimeString('es-EC');$('date').textContent=d.toLocaleDateString('es-EC',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+tick();setInterval(tick,1000);
+function add(who,msg){const p=document.createElement('p');p.className='msg';const b=document.createElement('b');b.textContent=who+': ';p.append(b,document.createTextNode(msg));$('chat').append(p);$('chat').scrollTop=$('chat').scrollHeight;}
+function speak(t){if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='es-EC';speechSynthesis.speak(u);}}
+function answer(raw){const q=raw.trim().toLowerCase();if(!q)return;add('TÚ',raw);let a;
+ if(q.includes('hora'))a='La hora actual es '+new Date().toLocaleTimeString('es-EC')+'.';
+ else if(q.includes('fecha')||q.includes('día'))a='Hoy es '+new Date().toLocaleDateString('es-EC',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+'.';
+ else if(q.includes('estado'))a='La interfaz está activa en modo local. Todavía no tengo conexión con otros dispositivos.';
+ else if(q.includes('ayuda'))a='Puedo responder comandos básicos de hora, fecha y estado. La conexión con ChatGPT y las automatizaciones se configurarán más adelante.';
+ else a='He recibido tu instrucción. En esta versión de prueba solo puedo responder comandos básicos. La conexión inteligente se añadirá en otra etapa.';
+ add('JARVIS',a);speak(a);
+}
+$('send').addEventListener('click',()=>{answer($('command').value);$('command').value='';$('command').focus();});
+$('command').addEventListener('keydown',e=>{if(e.key==='Enter')$('send').click();});
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+$('mic').addEventListener('click',()=>{if(!SpeechRecognition){$('voiceHint').textContent='Este navegador no ofrece reconocimiento de voz. Puedes escribir comandos.';return;}const r=new SpeechRecognition();r.lang='es-EC';r.interimResults=false;r.maxAlternatives=1;$('status').textContent='● ESCUCHANDO';r.onresult=e=>answer(e.results[0][0].transcript);r.onerror=()=>{$('voiceHint').textContent='No se pudo reconocer la voz. Revisa el permiso del micrófono.';$('status').textContent='● SISTEMA LOCAL ACTIVO';};r.onend=()=>{$('status').textContent='● SISTEMA LOCAL ACTIVO';};try{r.start();$('voiceHint').textContent='Te escucho…';}catch(e){$('status').textContent='● SISTEMA LOCAL ACTIVO';}});
+</script>
+</body>
+</html>
